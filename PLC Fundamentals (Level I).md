@@ -307,4 +307,33 @@ Allows the PLC to move to a different rung (label) to run logic there
 	- Bookmark - Place a jump command ahead of it if it is something you want to be run every time but also have the ability to return to this spot 
 ## PID - Proportional Integral Derivative Control Loops
 
+### What is PID?
+ ![[Pasted image 20240920154016.png]]PID stands for Proportional-Integral-Derivative, which is a type of control loop feedback mechanism commonly used in industrial control systems. Here's a breakdown of its components and how they work together:
+### Components of PID Control
+1. **Proportional (P)**:
+    - The proportional term produces an output that is proportional to the current error value.
+    - **Error** is the difference between a desired setpoint and the current process variable.
+    - A larger error results in a larger control output, which helps to reduce the error quickly.
+    - However, solely using the proportional control can lead to a steady-state error.
+2. **Integral (I)**:
+    - The integral term focuses on the accumulation of past errors.
+    - It integrates the error over time, which helps eliminate the steady-state error by adjusting the control output based on the accumulated error.
+    - If the error persists, the integral term increases, driving the system to correct the offset.
+3. **Derivative (D)**:
+    - The derivative term predicts future errors based on the rate of change of the error.
+    - It provides a damping effect, which helps to stabilize the system and reduce overshoot by reacting to the speed at which the error is changing.
+    - This can help to smooth out the response of the system.
+### PLC Logic
+![[Pasted image 20240920154327.png]]
+A PID will receive a setpoint (either inputted or hardcoded), that value tells the PLC what setpoint it should try to maintain on the control and process variables. There are three elements: Setpoint, Process Variable, Control Variable. 
+
+The idea is to chance or control the Control Variable in order to get the Process Variable to line up with the setpoint value. 
+
+For example, if we would like to maintain a temp of 72 degF in our home, we will control the A/C Compressor Power in order and watch the thermostat as our Process Variable 
+
+Below is an example of the PID Setup Screen:
+![[Pasted image 20240920155250.png]]
+## Instruction Sets and References
+
+# Program Setup
 
