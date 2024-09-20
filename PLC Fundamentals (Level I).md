@@ -1,0 +1,309 @@
+# Setup
+[PLC Fundamentals (Level 1) Course](https://www.plcdojo.com/courses/take/plc-fundamentals/lessons/15202842-course-intro-curriculum-objectives
+# Introduction
+There are three files to download for this course:
+- RSLinx Classic![[Pasted image 20240918133856.png]]
+- RSLogix Emulate 500![[Pasted image 20240918133915.png]]
+- RSLogix Micro![[Pasted image 20240918133936.png]]
+- (Optional) FactoryTalk View Studio
+	- Factory talk view studio is where you CREATE applications for your process. Factory talk view ME station is where you RUN the application you created in factory talk view studio
+
+Looks to be A PLC Emulator, the drivers for that PLC Emulator and the link between PC and PLC
+
+There are also two PDF's that go along with these downloads:
+- [[MicroLogix 1400.pdf]]
+- [[PLC_procedure.pdf]]
+
+The Three Programs after installation are:
+- RSLinx
+- RSLogix Micro Starter Lite
+- RSLogix Emulate500
+
+When Stopping a file, you must Hault (HLT) then click File>Close
+
+Programs communicate as such
+**RSLogix** <-> **RSLinx** <-> **RSLogix Emulate500**
+![[RSLogixComms]]
+## RSLogix 500 vs 5000 vs Studio 5000
+- RSLogix 500
+	- Supports AB MicroLogix processors
+	- Mid Range PLC
+- RSLogix 5000
+	- Support AB CompactLogix processors
+	- Does not have a Free or Trial version
+- CCW - Connected Components Workbench
+	- Supports Micro800 Processor 
+	- Low Range PLC 
+## PLC Programming Languages
+Some types of languages:
+- Function Block Diagrams 
+- Instruction Lists 
+- Ladder Logix
+- Graph Programming
+- Structured Text 
+	- Akin to C or Assembly code
+# PLC Programming Overview
+## Objectives:
+- PLC Role in Automation
+- RSLogix 500 Programming Environment 
+- Ladder Logic
+- PLC Program Flow and what it does
+- Begin looking into Process as Inputs, Conversions, and Outputs
+## PLC Automation
+Early Automation was using Relays for automation. These have become Programable Relays and PLC's
+
+PLC's are fully scalable controllers.
+
+Why aren't we using typical PCs to control computers?
+- Computers tend to be instable (Crashes, Power Spikes, errors)
+- PLCs are built to be very robust and simple by design to be less prone to crashes and errors
+## PLC Program Flow
+- When you create a PLC Program, you start with Ladder 2 - MAIN
+	- This is your MAIN function
+- You do not want all of your code in One ladder
+- Code will run sequentially starting from Ladder 2 -MAIN RUNG 0 then RUNG 1 then RUNG 2 … unless there is a Jump command
+- Every time a PLC runs through a Ladder such as Ladder 2, this is called a Scan
+> [!Important] Inputs, Conversions and Outputs
+> You should think of how a machine and a process works, it is essentially Inputs, Conversions and Outputs
+> ![[Pasted image 20240918154613.png]]
+# Inputs and Outputs (IO)
+## Outline:
+1. What is IO
+2. Why is IO important
+3. What is Digital and Analog IO
+4. What types of IO modules are there?
+## IO Overview
+- IO stands for Input and Outputs. When working with PLC's, Inputs are manipulated to produce Outputs.
+- The PLC will use a program to decide what action to take, when and how for its control of the devices attached to it
+## Digital IO
+- AKA Discrete IO
+- These are devices that send a Boolean signal such as On/Off, Open/Closed, 1/0, True/False
+- These signals only have two states, they can never be in between
+- Digital Outputs are devices that work with Boolean rules. A solenoid is either energized or de-energized,
+## Analog IO
+- Analog devices have many different states expressing varying levels of precision
+- For example, you can have many different voltages, percentages...
+- Analog output devices include heater coils, motor drives
+## IO Modules
+- An IO Module is an addon to the PLC to send or receive inputs and outputs
+- Sometimes these modules will be specialized based on the device it needs to interface with
+- PLCs then become very scalable depending on your needs
+	- As long as there is room on the DIN rail, you can add more if needed
+# Programming Fundamentals
+## Objectives
+1. Basic Datatypes
+2. Data Tables and Addressing
+3. Flow of Rungs and Branches in a Ladder
+4. Program Instructions 
+5. PID Control Loop
+## Data Management
+In the Project Folder, you will find a "Data Files" Folder. Internal Management of PLC data happens here.
+
+There are many different data options the PLC can store:
+1. **Binary!**
+2. **Integers!**
+3. **Float!**
+4. Timers
+5. Control
+6. String
+7. Long
+8. Message
+9. PID
+10. and More...
+### Data Tables 
+Everything you do in RSLogix gets a Memory Address and Location. 
+
+Binary is B
+Analog is N and F
+- N is Integer
+- F is Float
+
+A typical structure of a memory register and IO address will have the following:
+`[TYPE][FILE(if applicable)]:[ROW or WORD or SLOT][/ or .][BIT or WORD or CHANNEL]
+
+For example: `I:2.2`
+TYPE: is `I` meaning this is an INPUT
+FILE: is not applicable b/c all inputs are stored in the same file
+SLOT: (since we are addressing IO) is `2` meaning this module is the second module to the right of our PLC 
+PERIOD: `.` because we are addressing a word meaning that this is an analog input address
+CHANNEL: (since this is an IO address) is `2` meaning this sensor is plugged into the third (0-1-2) position of the module 
+
+Example: `B3:12/15`
+`B` - This is a BIT type (True or False)
+`3` - The File is #3
+`12` - The WORD Field. In a bit file, each line contains 16 bits to make up a word. The `12` here means this is looking at the 13th word in that file
+`/` - because we are addressing a bit, this is storing true or false data
+`15` - because this is a bit address, `15` is referring to the 16th bit in the word
+
+> [!tip] WORD
+> Below is an example of what a WORD is in the context of datafiles:
+> ![[Pasted image 20240919150746.png]]
+
+
+Example: `O:4/8`
+`O` - Output
+`4` - Slot is the 4th module to the right of the PLC 
+`/` - Addressing a bit, digital output address
+`8` - device is plugged into the 9th position of the module
+
+Example: `T4:3/DN`
+`T` is a Timer
+
+## Condition and Outputs (Left to Right)
+- Programs run top to bottom, 0 down
+- Rungs run from left to right
+- White space in the middle divides the conditions from the outputs:
+	- 0000-Conditions-Outputs
+![[Pasted image 20240919144959.png]]
+
+If the condition is not met, the PLC will skip to the next row
+
+You cannot have two actions on the same branch: you cannot have an Output followed by another output. Actions need to be on separate branches
+
+Its best to think of ladder logic as an electrical circuit:
+- AND is Serial
+- OR is Parallels 
+## XIC, XIO, OTE
+### XIC - Examine IF Closed
+![[Untitled.png]]
+Examine this statement if the circuit is closed 
+### XIO - Examine IF Open 
+![[Untitled-1.png]]
+Examine this statement if the circuit if Open
+### OTE - Output Energized
+![[Pasted image 20240919150536.png]]
+This will take a bit within the datafiles and set it to 1 to keep the bit as a value of 1 as long as the condition is true
+
+This is the preferred method for setting a bit to 1 or 0
+## OTL and OTU
+These are other methods for setting a bit
+### OTL - Output Latch
+![[OTL.png]]
+When the condition becomes true, then the output will energize and latch in that position. Essentially will sticks on. This will remain latched until it receives an OTU - Output Unlatched
+### OTU - Output Unlatched
+![[OTU.png]]
+This command will Unlatch a previously latched output
+### Best Practice Programming 
+RSLogix will not let you energize an Output in many different placed. However, it will let you energize in many different places using Latching and Unlatching.
+> [!warning] Energize in ONE spot and ONE spot only 
+> This might seem convenient, but it will create many issues down the road. 
+> 
+> **You will want to energize a bit in ONE spot in your program**
+> 
+> Latching in multiple spots creates a nightmare when attempting to debug where output energizing is happening.
+## ONS, OSR, OSF
+### ONS - One Shot
+This comes in handy in the case where you want a light to turn on once, even if you were to hold the button down. This will trigger exactly one time. When this is triggered, the ONS will trigger for exactly 1 scan and then will reset itself. One time instantaneously. 
+
+The One Shot `ONS` will handle 90% of the PLC needs. Depending on the processor, some processors will prevent multiple instructions to the right of a `ONS` and some prevent branching around a `ONS`
+### OSR - One Shot Rising
+Acts as an Output Instruction. When this is triggered, The output bit acts exactly as the One Shot `ONS`, the storage bit will stay on with the light switch until it is turned off.
+### OSF - One Shot Falling
+Acts as an Output Instruction. This works opposite to the One Shot Rising. The One Shot Falling will trigger when the condition becomes false, then the output bit will trigger for one scan and the storage bit fires and stays energized until the light switch is closed again
+### The Storage Bit
+- OSR: False to True Transition
+- OSF: True to False Transition
+![[OneShots2 1.jpg]]
+## TON, TOF, RTO
+Sometimes you want things to happen on a delay.
+### TON - Timer ON (Delay)
+![[Pasted image 20240919162449.png]]
+
+Timers work as such for TT, EN, DN
+![[Pasted image 20240919163304.png]]
+
+If everything to the left of a timer is true, the timer is considered as "Energized". If the timer becomes de-energized, it will reset its accumulator 
+
+A timer has the following fields:
+- EN - This is the bit that turns on when the timer is currently energized
+- TT - This is the bit that turns on when the timer is currently timing or counting
+- DN - This is the bit that turns on when the timer has completed counting and has counted "DOWN"
+- Timer Base - This is the unit base that the timer uses such as seconds or milliseconds. 
+- Preset - This is the timer value, what the timer is counting up to. Multiply by the base to determine the timer limit (5 x 1.0 = 5 seconds)
+- Accum - This is what is the accumulated number. Usually 1.
+### TOF - Timer OFF (Delay)
+Timer will start when its conditions are False and will start to count exactly like TON
+### RTO - Retentive Timer ON
+The same as TON Timer On, but it is a retentive timer on. Retentive timers require a reset in order to reset the timer's accumulator. Holds onto timing data when de-energized. 
+## CTU and RES
+### CTU - Counter UP
+- Counter that counts up. There is also a CTD for Counter DOWN. 
+- The counter counts every time that the condition becomes true (called transitions)
+- Counters have CU for Count Up Bit and a DN for Done bit. CU bit typically energizes every time a count occurs (if scan time is 6ms, then occurs for 6ms). 
+- DN turns on when the counter is Done. 
+- Counters need to be reset to turn them back to 0. This uses the RES command
+## Comparators
+These are logic statements for comparing two pieces of information:
+- Greater Than (`GRT`)
+- Less Than (`LES`)
+- Greater Than or Equal To (`GEQ`)
+- Less Than or Equal To (`LEQ`)
+- Equal To (`EQU`)
+- Not Equal To (`NEQ`)
+- Limit Test (`LIM`)
+	- This is a test of a value to be compared between a low and high limit
+	- This is Inclusive (`GEQ` and `LEQ`)
+	- You can revert the Low and High limits to revert the polarity
+### Limit Test Example (`LIM`)
+![[Pasted image 20240920134934.png]]
+This is a Limit Comparator that compares an Accumulated value, `C5:0.ACC`, with a Low Limit of 4 and High Limit of 7. This is inclusive, so this condition will be true if the Accumulated value is between 4-5-6-7
+In Math notation, this would be: `[4,7] = 4,5,6,7`
+
+If you were to switch the Limits such that: `[7,4]` for a Low Limit of 7 and High Limit of 4, this is a valid condition. This will reverse the `LIM` condition so that it is an exact opposite of the original condition. Therefore, the condition will become true when it is any number outside of the range specified:
+```
+[7,4] = INF -> 4, 7 -> INF
+Example: 0,1,2,3,4,7,8,9,10 will cause the condition to be true 
+```
+**The condition will not be true if the the Accumulator is either 5 or 6**
+## Mathematical Operators and CPT
+These are statements for performing math calculations:
+- Add (`ADD`)
+	- Typically comparing two constants will not work, RSLogix would like to use memory locations
+- Subtract (`SUB`)
+- Multiply (`MUL`)
+- Divide (`DIV`)
+- Compute Result (`CPT`)
+	- Useful for more complex math. 
+	- Allows for use of Expressions in one clean block
+	- Example:
+		- ![[Pasted image 20240920140424.png]]
+> [!Tip] Math Operators and Constants
+> Typically RSLogix will not let your program compile if you use two constants in a math function. Example: `ADD(4,5)`. RSLogix prefers to use memory locations as inputs
+## Scale with Parameters (`SCP`)
+This instruction will take an input that is defined against one scale and translate it according the a different scale.
+`**May need to confirm math on this one`
+![[Pasted image 20240920142120.png]]
+Formula for Output Scale value is below:
+$$
+\text{Output} = \left( \text{Input} - \text{Input}_{\text{min}} \right) \cdot \left( \frac{\text{Output}_{\text{Max}} - \text{Output}_{\text{Min}}}{\text{Input}_{\text{Max}} - \text{Input}_{\text{min}}} \right) + \text{Output}_{\text{Min}}
+$$
+```
+Scaled Value = (mA Input Value – Input Min) * ((Output Max – Output Min) / (Input Max – Input Min)) + Output Min
+```
+
+This can also be visualized as: 
+$$
+\text{Output} - \text{Output}_{\text{Min}} = \left( \frac{\text{Output}_{\text{Max}} - \text{Output}_{\text{Min}}}{\text{Input}_{\text{Max}} - \text{Input}_{\text{min}}} \right) \cdot \left( \text{Input} - \text{Input}_{\text{min}} \right)
+$$
+## Move (`MOV`)
+This will move a value from one memory location to another. It is essentially a copy command (however, there is a copy command)
+
+A couple of good use cases are:
+1. If you would like to set a time value ahead of time:
+![[Pasted image 20240920145928.png]]
+2. Resetting a value back to 0 for a counter or timer
+3. Recasting - When you convert from one data type to another
+## Jump (`JMP`) and Label (`LBL`)
+Allows the PLC to move to a different rung (label) to run logic there
+### Jump - `JMP`
+- Allows the PLC program to jump to a location and continue to execute from there. Almost like a skip or function block command 
+- Any jump is addressed as a Q
+	- E.G. Q2.0 - Program File 2 and Label 0
+### Label - `LBL`
+- A rung with a Label (as its condition) will not run unless it is jumped to
+- For example, if you have a label condition, the PLC will skip over it unless there is a Jump command to that spot
+- This allows you to use this almost as a function or as a bookmarker
+	- Function - Jump command all by itself, will skip if not jumped to
+	- Bookmark - Place a jump command ahead of it if it is something you want to be run every time but also have the ability to return to this spot 
+## PID - Proportional Integral Derivative Control Loops
+
