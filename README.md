@@ -1,2 +1,7 @@
 # PLC-Notes
- PLC Notes on Git
+
+# Info:
+Notes On PLCs using Obsidian Notes
+
+# Links:
+[[PLC Fundamentals (Level I)]]
