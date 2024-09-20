@@ -4,4 +4,4 @@
 Notes On PLCs using Obsidian Notes
 
 # Links:
-[[PLC Fundamentals (Level I)]]
+[[PLC Fundamentals (Level I).md]]
