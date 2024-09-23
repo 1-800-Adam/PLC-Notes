@@ -440,3 +440,66 @@ This is the IO Configuration being used for this section of programming:
 Below is an example of how Inputs and Outputs (Segregation of IO) can be mapped:
 ![[Pasted image 20240923145002.png]]
 ## PROPER Digital Control Logic
+- There are three items to control a Digital Device:
+	- Trigger (Something that starts the cycle)
+		- True for only ONE Scan 
+		- Energized our digital and then immediately looses its control of the process
+		- Only fires once for each time the trigger conditions are present
+	- Hold-In (keeps it energized)
+		- This is what keeps the circuit going once it is triggered
+		- The Hold-In cannot start or stop the circuit
+		- The digital device being controlled is its own hold-in
+	- Interrupt (Something that breaks the cycle)
+		- A condition in series with the hold-in (same branch)
+		- Its only purpose is to break the circuit from the hold-in
+		- Cannot start the circuit or keep it going 
+![[Pasted image 20240923163921.png]]
+- Hold-In does not have a place in Memory
+	- Device we are controlling will hold itself in
+### DCL Circuit Example:
+![[Pasted image 20240923165246.png]]
+1. Start button is pressed
+2. One Shot is activated 
+3. Trigger Bit is activated for one scan
+4. During this scan, because the trigger bit is energized, this condition is true
+5. The Digital Device activated
+6. Next time through scan, the trigger bit is no longer energized, but the digital device is, therefore this condition is true and circuit repeats. This is the Hold-In portion of the logic
+7. If the stop button has not been pressed, then the circuit continues. If the stop button has been pressed, then this condition becomes false and (XIO->1 ->F) and this rung does not trigger
+
+In this example, the start button can be swapped out with any sort of control logic. Likewise, the stop button or Interrupt can be swapped with logic as well:
+![[Pasted image 20240923165839.png]]
+
+In its essence, Digital Control Logic template is:
+![[Pasted image 20240923170256.png]]
+### Additional Notes on Digital Control Logic
+From instructor Notes
+![[Pasted image 20240923170436.png]]
+![[1596816449975.png]]
+![[Pasted image 20240923174252.png]]
+
+Following is code snipped for rungs:
+```
+XIC B9:0/0 ONS B9:0/3 OTE B9:0/5
+XIC B9:0/1 ONS B9:0/4 OTE B9:0/6 
+BST XIC B9:0/5 NXB XIC B9:0/2 XIO B9:0/6 BND OTE B9:0/2 
+```
+### Dead-wrong, Crappy and Garbage Digital Controls
+#### Careful with Latching
+![[Pasted image 20240923170926.png]]
+We need to be careful when we use latching as if we latch a device in different programs, there is a possibility that the device will perpetually be triggered.
+
+It also makes troubleshooting a nightmare when you try to determine which latching logic is triggering the device.
+
+Latches should be used for permanent bits that should be always energized such as for testing setups. Should be something that should Always be energized. The same with Unlatched, such that you only have the unlach or latch command on a single rung and no where else. 
+
+Almost as an Always TRUE or Always FALSE Constant. Do not use Latching and Unlatching for controls. Use OTE for this. 
+#### Dangers of not using Digital Control Logic
+In the below example, the programmer would like for a proximity switch to activate a motor whenever it is energized:
+![[Pasted image 20240923172314.png]]
+
+This has caused the input devices to be in direct control of the output device. 
+
+This may look like a simple solution, but what happens if the Proximity switch is jammed? The motor will run forever and burn out. 
+
+The challenge here is to think through all the ways that your program can fail. The purpose of the Digital Control Logic is to provide a "middle man" to make sure that something that needs to be controlled is being controlled correctly
+### Programming Analog IO
