@@ -1,5 +1,8 @@
-# Setup
-[PLC Fundamentals (Level 1) Course](https://www.plcdojo.com/courses/take/plc-fundamentals/lessons/15202842-course-intro-curriculum-objectives
+# Setup and Resources
+1. [PLC Fundamentals (Level 1) Course](https://www.plcdojo.com/courses/take/plc-fundamentals/lessons/15202842-course-intro-curriculum-objectives
+2. [Lessons In Industrial Instrumentation - Tony R. Kuphal](https://www.ibiblio.org/kuphaldt/socratic/sinst/book/liii.pdf)
+3. [PLCDev.com](https://www.plcdev.com/)
+4. ...
 # Introduction
 There are three files to download for this course:
 - RSLinx Classic![[Pasted image 20240918133856.png]]
@@ -336,4 +339,104 @@ Below is an example of the PID Setup Screen:
 ## Instruction Sets and References
 
 # Program Setup
+## Setup Program and Processor
+- Start by opening RSLogix500
+- New File Btn -> All Processors that are compatible with the IDE
+- RSLinx is a program that manages network and connectivity between PLC, HMI, Servers...
+- Who Active will bring up a smaller version of RSLinx to see what is available for communication
+	- For this example, we will connect to the MicroLogix 1100 that is not currently running. This is the network location that the program will comm with by default
+![[Pasted image 20240923121654.png]]
+- Ladder #2 is our default program, we will rename this to "MAIN": 
+![[Pasted image 20240923121807.png]]
+- Next we will want to configure our controller: Controller Properties
+	- Here we can change the driver from an Emulator to a live PLC
+![[Pasted image 20240923121947.png]]
+## Setting up Module Configurations
+- Click on IO Configuration
+![[Pasted image 20240923122142.png]]
+- We will be setting up the PLC to be able to integrate with the Inputs and Outputs
+![[Pasted image 20240923122238.png]]
+- We will then select the BWA Base and 16pt
+![[Pasted image 20240923122436.png]]
+- In the Emended IO Configuration, this is where we can set filters on inputs to prevent jitter comming in, typically this will be set to 1 mS for Inputs and typically 60 Hz for Analog inputs
+![[Pasted image 20240923122637.png]]
+- Table to the right of the I/O configuration are all of the compatible IO modules with this 110
+	- We will add an Analog 4 Channel Input (1762-IF4) to slot 1
+	- Double click and see what config can be done
+![[Pasted image 20240923122949.png]]
+![[Pasted image 20240923123343.png]]
+## Scaling and Resolution
+Overview of Bit levels: 
+![[Pasted image 20240923123829.png]]
+- Bits are very very important for working with PLC's 
+- When we work with a MicroLogix processor, we have a 14-bit resolution
+	- 14 bits = 2^14 = 16,384 levels
+- Example:
+	- If I scale a 10-bit analog signal to a float with a range of 0-100, how many decimal places should I display to utilize (almost) all available precision?
+	- A 10 bit signal is 2^10 for 1,024 levels
+	- A range of 0-100 has 101 levels
+	- If we were to add a single decimal point, this will increase that range by a factor of 10 (0.1, 0.2 ... 0.9)
+	- That means with the addition of a single decimal place, that takes us to: `100*10+1=1001` where 100 is the range limit, 10 is the number of decimal places between 0.0 and 0.9
+	- If we increase it to 2 decimal places, that means that between 0 and 1 we have (0.00,0.99) for 100 extra levels to keep track of.
+	- therefore: `100*100+1=10,001`
+	- Our 10-bit float will only hold up to 1,024 levels which is close to the single decimal point
+	- We would need to use at least a 14 bit float to hold the range needed for 2 decimal places (0.00,100.00)
+## Function Files
+- Function files are inherited from the type of processor
+- There are a couple of important ones to cover:
+	- `HSC` - High Speed Counter
+		- Receives high frequency inputs (up to 20,000 Hz)
+	- `STI` - Selectable Timed Interrupt
+		- Allows us designate one of the program files and scan one of those program files more often than the rest OR to call it out of order
+		- If we need one ladder to execute at one specific time without needing to JUMP to it, 
+	- `RTC` - Real Time Clock
+		- A wall clock that runs inside the PLC that can be set to program around time
+		- If you need a program to run at a certain time of day such as 9am, this is how you would do it
+	- `...` - There are More as well
+## Program Files
+- These are where the ladder logic files are stored
+- LAD2 is what the PLC will continuously scan
+	- Typically all subroutines will be called from the MAIN ladder 
+- There are no typical naming conventions with how it should be named
+	- These could be: `ALARMS`, `IO`, `CONTROLS`
+	- ![[Pasted image 20240923130906.png]]
+	- Could also be: `DIGITAL INPUTS`, `ANALOG INPUTS`
+## Adding and Expanding Program Data Files
+### Adding More Program Files
+- Covering what happens when you would like to add and expand your program files
+- `JSR` - Jump to Subroutine
+	- `JSR - U:3` is a Jump to Subroutine or Ladder File #3
+> [!Important] Expansion
+> As soon as you add a new Program File, **Immediately** add a `JSR` (Jump to Subroutine) command so you do not forget
+### Managing Data Files
+![[Pasted image 20240923133121.png]]
+- When you define a spot in memory (E.g. an Examine if Closed for B3:0) when you open the Data File B3, you will see the :0 memory spot with that symbol:
+	- ![[Pasted image 20240923133510.png]]
+- If you need more than 16 bits, 
+	- If you open the properties for the Binary file, instead of 1 element, set to 10 elements.
+	- This will change your memory location from 16 bits to 16x10 = 160 bits ranging from B3:0 through to B3:9
+	- ![[Pasted image 20240923133737.png]]
+	- There is a limit to how many elements you can have in a B3 data file
+	- If you go over the limit, you can create a new data file to define a new file slot and data type
+	- ![[Pasted image 20240923133953.png]]
+# IO Programming
+## Objectives
+1. Practical Considerations when integrating IO
+2. Best practices for IO Programming
+3. Processing Digital IO
+4. Processing Analog IO
+5. Understanding LL, L, H, HH in Analog Process Control
+## Programming Digital IO
+This is the IO Configuration being used for this section of programming:
+![[Pasted image 20240923142601.png]]
+- Description is human readable for program, symbol is mainly used when setting up HMI
+- `I:1/0` - Input, Module 1, Channel 0
+- `B3:0/0`
+	- ![[Pasted image 20240923144050.png]]
+	- Best practice is to setup program such that the output energized relies on a XIC input is because input mapping can change. We need a middle man piece of logic such that if the I/O mapping changes, then the change happens here and can be easily managed in one spot
+- ![[Pasted image 20240923144411.png]]
+	- This is what is called input mapping, mapping an input from the IO module to a bit location in memory 
 
+Below is an example of how Inputs and Outputs (Segregation of IO) can be mapped:
+![[Pasted image 20240923145002.png]]
+## PROPER Digital Control Logic
