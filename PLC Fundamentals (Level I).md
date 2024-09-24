@@ -599,28 +599,33 @@ Next we will want to energize the blower based on this state. The blower states 
 
 We may also want some logic to make sure that the operator cannot switch from AUTO to MANAUL:
 - ![[Pasted image 20240924131849.png]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Extra Notes:
+- Move source is what we want the number to be, the origin
+- One shot `ONS` needs a memory location
+![[Blower_HOA.pdf]]
 ## Digital Tank and Pump Controls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Analog Tank and Pump Controls
 ## PID Heater Control
 ## What it Takes to Develop Process Logic
