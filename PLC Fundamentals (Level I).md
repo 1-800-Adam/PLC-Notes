@@ -604,28 +604,25 @@ Extra Notes:
 - One shot `ONS` needs a memory location
 ![[Blower_HOA.pdf]]
 ## Digital Tank and Pump Controls
+Machine concept:
+![[Pasted image 20240924150342.png]]
 
+`I:1/0` (Input:Slot 1/Channel 0) ![[Pasted image 20240924151623.png]]
 
+We have 4 inputs and 2 outputs:
+![[DTPC_DIGITAL_IO.pdf]]
 
+Smart way would be to define inputs and outputs first in the Digital IO file and then in the main logic/controls file, start with everything we would like to control. 
+![[Pasted image 20240924152857.png]]
 
+Our tank will be running two modes, a fill and a drain
 
+When we are setting modes, we can use a bit for two modes or an integer for multiple
 
+In this example, we will use a bit to determine the mode. We also need a delay timer to make sure that waves in the tank do not cause the limit switches to oscillate and cause the pump to turn on and off rapidly
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+In order to make sure that once something is triggered, we need to hold the state until we reach a higher level
+![[Digital_Tank_Pump_Controls.pdf]]
 ## Analog Tank and Pump Controls
 ## PID Heater Control
 ## What it Takes to Develop Process Logic
