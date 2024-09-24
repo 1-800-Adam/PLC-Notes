@@ -624,5 +624,7 @@ In this example, we will use a bit to determine the mode. We also need a delay t
 In order to make sure that once something is triggered, we need to hold the state until we reach a higher level
 ![[Digital_Tank_Pump_Controls.pdf]]
 ## Analog Tank and Pump Controls
+In this example, we are modifying our program from before to remove the digital controls and adding an analog sensor that can be calibrated such that it can detect the level of the tank. 
+![[AnalogTankPumpControl.pdf]]
 ## PID Heater Control
 ## What it Takes to Develop Process Logic
