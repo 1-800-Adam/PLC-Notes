@@ -540,3 +540,87 @@ There are 4 levels for Analog process control limits:
 ![[Pasted image 20240924121302.png]]
 For example, suppose we need to control the temp of a process to be within a limit, Low and High limits are where the PLC will control the process (e.g. turning on and heater or chiller). However, if we are outside that range, we are in either a Low Low or High High Limit. This is where there may need to be alarms that are triggered in the PLC to alert the operators that there is something wrong. Usually this will interrupt the process depending on the application. 
 # Process Logic
+## Objectives:
+1. Learning how processes work
+2. concept of HOA Control
+3. Basic level control programming
+4. Analog and Digital Control programming and options
+5. how to control and protect a pump
+6. PID control with a heater program
+## Process Programming Overview
+Process Logic is the heart and soul of a PLC Program. First we need to stop and visualize the process. Some questions to ask:
+1. What does the machine look like?
+2. How does it work?
+3. How is it laid out?
+4. What did the Process Engineer have in mind when developing the P&ID Diagram (Piping and Instrument Diagram) or Controls Schematics
+
+You also will need to think about how things can also go wrong and how we will handle those exceptions. 
+
+This is typically a visual flow diagram or cause and effect diagram to help develop what the program is to look like. It will be a lot easier to write the program if you can visualize as much as possible up front first including how it is to tie into other aspects of the automation pyramid:
+![[65f854814fd223fc3678ea64_64ecb5979b278426f219fe7b_What-is-the-Automation-Pyramid.png]]
+## Blower HOA (Hand / Off / Auto) Control
+HOA stands for Hand, Off, Auto. It is a control scheme for discrete (Digital) as well as analog devices. There are three phases:
+- Hand (Manual)
+	- This is where we have some flexibility depending on the operator's process
+	- Can work like a Jog
+- Off 
+	- This means that blower will not turn on under ANY circumstances
+- Auto (Automatic)
+	- Process will turn the blower on and off automatically
+	- Can the blower running in Auto be switched to Manual?
+
+We will write the control logic for the three buttons to set the status to the blower: 
+- We have a Digital IO and Controls File
+- IO Config looks like this: 
+	- ![[Pasted image 20240924125301.png]]
+- First, make sure that the main branch is running the Digital IO and Controls file via the `JSR` command
+- Next, we need to bring Digital IO into the program the correct way by associating the digital IO with bits in the data file
+	- Start with the XIC and address it it the first channel of output in module 1. This will be "Hand PB Input" for pushbutton input
+	- Then associate that input with an OTE in our data file as "B3:0/0" as "Hand PB" with a symbol as "Hand_PB"
+- Then we will setup the OFF and AUTO in the same way
+	- ![[Pasted image 20240924125824.png]]
+- Next we will setup the Outputs:
+	- We will create an XIC that will look at a bit in memory to energize our output
+	- ![[Pasted image 20240924130035.png]]
+
+Next we will verify and switch to the controls file to implement the controls logic:
+- First we will want to devise a way to setup the state of the blower based on the states defined in our IO section (`MANUAL = B3:0/0, OFF = B3:0/1 and AUTO = B3:0/2`)
+- We would like to store the machine state as an INT to be able to refer to it in the future
+- We will setup a rung to XIC if the HAND PB is energized and a MOV command to store this as an INT
+- Next we will add a one shot to make sure that this is energized once and only once per scan
+	- MANUAL ![[Pasted image 20240924130749.png]]
+- We will repeat this for the Off and Auto states:
+	- OFF State![[Pasted image 20240924130823.png]]
+	- AUTO State ![[Pasted image 20240924130913.png]]
+
+Next we will want to energize the blower based on this state. The blower states are (0 = OFF, 1 = HAND, 2 = AUTO). In short, the blower can only be running if it is in either HAND or AUTO. If it is in AUTO it will need some additional controls to make sure it is supposed to be in this condition
+- ![[Pasted image 20240924131529.png]]
+- The Blower Auto Energize Bit in this example is a fallback
+
+We may also want some logic to make sure that the operator cannot switch from AUTO to MANAUL:
+- ![[Pasted image 20240924131849.png]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Digital Tank and Pump Controls
+## Analog Tank and Pump Controls
+## PID Heater Control
+## What it Takes to Develop Process Logic
