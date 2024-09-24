@@ -502,4 +502,41 @@ This has caused the input devices to be in direct control of the output device.
 This may look like a simple solution, but what happens if the Proximity switch is jammed? The motor will run forever and burn out. 
 
 The challenge here is to think through all the ways that your program can fail. The purpose of the Digital Control Logic is to provide a "middle man" to make sure that something that needs to be controlled is being controlled correctly
-### Programming Analog IO
+## Programming Analog IO
+- Adding Ladders: Digital IO and Analog IO
+	- Call Ladder from the Main using a `JSR`
+- Adding an Analog 2 Channel Input
+	- Analog 2 Channel Input, 2 Channel Output (`1762-IF2OF2`)
+	- All as 4 to 20 mA signals
+	- Scale for Raw Prop for Input channel 0 and 1
+	- Scale for PID for for Outputs channels 0 and 1
+	- ![[Pasted image 20240924113036.png]]
+- Back over to the Analog IO ladder logic 
+	- First thing we want to do is scale with Parameters `SCP`
+	- First Rung
+		- I:3.0 - Channel 3, Dot for word level, and 0 for the channel
+		- Input Min - 4,000 (Correlates to the 4 to 20 mA signal)
+		- Input Max - 20,000 (Correlates to the 4 to 20 mA signal)
+		- Scaled Min - 0 (PSI)
+		- Scale Max - 5 (PSI) (we are compressing 16,000 levels of resolutions down to 6 levels) 
+		- Output - F8:0 for the memory location as Pressure (0-5 PSI)
+	- We may also like to put in some conditional processing in case our pressure sensor is out of range
+		- Add branch
+		- On other branch, add a `LES` command and test of `A=I:3.0<B=4000`
+		- If true, we will use the `MOV`  to move the minimum output of 0 to the stored pressure location of `F8:0`. Now this memory location will never read as a negative value
+	- We may also like to filter out if the pressure is greater than the input max
+		- Add a branch to the above
+		- Use a `GRT` greater than command to test for `A=I:3.0>B=20000` and then a `MOV` command to move 5 to the F8:0. 
+	- Suppose we want to see what percent of the pressure sensor is of the max
+		- Extend branch up
+		- Add `SCP` and 4000-20,000 scaled to 0 to 100 and store as a float or int
+- ![[Pasted image 20240924120216.png]]
+## Analog Process Control (LL,L,H,HH)
+There are 4 levels for Analog process control limits:
+- LL - Low Low Limit
+- L - Low Limit
+- H - High Limit
+- HH - High High Limit 
+![[Pasted image 20240924121302.png]]
+For example, suppose we need to control the temp of a process to be within a limit, Low and High limits are where the PLC will control the process (e.g. turning on and heater or chiller). However, if we are outside that range, we are in either a Low Low or High High Limit. This is where there may need to be alarms that are triggered in the PLC to alert the operators that there is something wrong. Usually this will interrupt the process depending on the application. 
+# Process Logic
