@@ -688,10 +688,10 @@ You want to make sure you have a real and steady condition before you sound an a
 
 Best practice to setup alarms in the PLC. It is not best practice in the long run if much of the alarm functionality is handled in the HMI as there is always a possibility that the HMI will go down.
 ### Adding Alarms on the Tank Pump Program
-![[DualBitAlarmsNotifications.pdf]]
+![test](./attachments/DualBitAlarmsNotifications.pdf)
 ### Adding Alarms on the Analog Heater Program
 - ONS makes the remainder of the rung true on a pulse while OSR sets a pulse to a memory location (a bit)that can be used to do other things. They're very similar.
-![[Heater_Alarms.pdf]]
+![[./attachments/Heater_Alarms.pdf]]
 ## Setpoints
 Setpoints are tools used to allow the operator to set limits and parameters for the system to function. 
 
