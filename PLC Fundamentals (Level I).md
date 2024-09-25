@@ -627,4 +627,40 @@ In order to make sure that once something is triggered, we need to hold the stat
 In this example, we are modifying our program from before to remove the digital controls and adding an analog sensor that can be calibrated such that it can detect the level of the tank. 
 ![[AnalogTankPumpControl.pdf]]
 ## PID Heater Control
+Setup a program to control a heater based on temp.
+Digital control -> Analog Control -> Incorporate a PID controller
+### DIGITAL
+#### IO SETUP:
+![[Pasted image 20240925115941.png]]
+#### LOGIC: 
+![[PID_Heater_DIGITAL.pdf]]
+### ANALOG
+#### IO SETUP:
+- ![[Pasted image 20240925122629.png]]
+- One Channel Each for the 1762-IF4 and 1762-OF4 configured for 4-20mA and Scaled for PID
+#### LOGIC: 
+![[PID_Heater_ANALOG.pdf]]
+> [!important] Analog Scaling with `SCP`
+> When you are bringing in an Analog input and scaling using the `SCP` command, the Min and Max ranges are below:
+> ![[Pasted image 20240923123343.png]]
+> 
+> Raw/Proportional: 
+> `4,000 - 20,000 -> (4-20mA)`
+> 
+> Scaled for PID:
+> `0 - 16,383 -> (14-bit signal)`
+> 
+> #SCP #ScaledForPID #InputMin #InputMax 
+##### PID Setup
+- 72 is what we would like to maintain
+- 212 is the Max in degF
+- 32 is the Min in degF
+- Control Output CV is only set if we are in PID Control mode MANUAL
+![[Pasted image 20240925130138.png]]
+- Tuning of PID involves slowly increasing the Kc value (Controller Gain) until the system starts to oscillate between the set points, and then cut it down to 2/3 of the set point that we had that causes it to oscillate
+	- Then do the same with the Ti. Raise the Ti until oscillate and then cut down by 2/3 
+	- In most cases, this will give us a sufficiently stable process
+- Further development needed in PID tuning
+##### Preventing Out of Range Outputs to the PID
+![[Pasted image 20240925134515.png]]
 ## What it Takes to Develop Process Logic
