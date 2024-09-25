@@ -2,7 +2,8 @@
 1. [PLC Fundamentals (Level 1) Course](https://www.plcdojo.com/courses/take/plc-fundamentals/lessons/15202842-course-intro-curriculum-objectives
 2. [Lessons In Industrial Instrumentation - Tony R. Kuphal](https://www.ibiblio.org/kuphaldt/socratic/sinst/book/liii.pdf)
 3. [PLCDev.com](https://www.plcdev.com/)
-4. ...
+4. [Data File Management Sheet by Adam Brigmann](https://docs.google.com/spreadsheets/d/1APY6ZYkW5Ri102nrqk3s50NMDwLXUXLQWyU8Em5qayI/edit?usp=sharing)
+5. ...
 # Introduction
 There are three files to download for this course:
 - RSLinx Classic![[Pasted image 20240918133856.png]]
@@ -663,4 +664,38 @@ Digital control -> Analog Control -> Incorporate a PID controller
 - Further development needed in PID tuning
 ##### Preventing Out of Range Outputs to the PID
 ![[Pasted image 20240925134515.png]]
-## What it Takes to Develop Process Logic
+# Alarms and Notifications
+## Objectives:
+1. Alarms and Notification theory
+2. Practical considerations for safety 
+3. Practical considerations for utility for the operator
+4. initiating and clearing event status best practices
+5. Use of setpoints
+## Alarms Overview
+Alarms tell the system when there is something wrong. They will interrupt processes and stop things to protect people and machines.
+
+Notifications are a step below to notify when things are starting to get out of order or can become a problem. These are almost like warnings.
+## Considerations 
+Best practice is to stop and think about how and when alarms and notifications should be used. The number one consideration is safety.
+
+For anything critical, we would like to notify the operator. However, there are certain instances where an alarm is not needed. For example, you would not put a Low Low alarm on a Freezer as the whole goal is to get as cold as possible (unless the aim is to maintain a certain temp), however it may help to have a notification. 
+
+Another best practice is to make sure that notification and alarms are used when needed. If you over notify an operator, they will begin to tune them out and not pay attention when things become very bad. More is not always better. What is beneficial to keep this running.
+## Dual-bit Alarm and Notification Programming
+I've developed a tracking sheet for management of data files as I do not have auto complete: https://docs.google.com/spreadsheets/d/1APY6ZYkW5Ri102nrqk3s50NMDwLXUXLQWyU8Em5qayI/edit?usp=sharing
+
+You want to make sure you have a real and steady condition before you sound an alarm.
+
+Best practice to setup alarms in the PLC. It is not best practice in the long run if much of the alarm functionality is handled in the HMI as there is always a possibility that the HMI will go down.
+### Adding Alarms on the Tank Pump Program
+![[DualBitAlarmsNotifications.pdf]]
+### Adding Alarms on the Analog Heater Program
+- ONS makes the remainder of the rung true on a pulse while OSR sets a pulse to a memory location (a bit)that can be used to do other things. They're very similar.
+![[Heater_Alarms.pdf]]
+## Setpoints
+Setpoints are tools used to allow the operator to set limits and parameters for the system to function. 
+
+
+
+
+## Alarms and Digital Control Logic
