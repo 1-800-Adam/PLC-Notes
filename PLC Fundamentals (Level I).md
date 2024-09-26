@@ -785,3 +785,93 @@ Some considerations:
 
 Ultimate goal is for someone with no prior experience with this system to be able to look at the HMI to be able to tell how the system works and what to do. 
 # Communications
+## Objectives
+1. Intro to general idea of comms
+2. serial connections
+3. ethernet connections
+## Communication Overview
+Many different options for Communications: 
+![[Pasted image 20240926125024.png]]
+
+In RSLogix, we typically will be using is RSLinx. RSWho will show us the devices on the network
+![[Pasted image 20240926130226.png]]
+
+This also gives us the option of taking AB PLC and publishing their tags on DDE and OPC protocols as an interface for other devices to read and write tags to the PLC. 
+
+# Program Walkthrough
+## Objectives
+1. Dissect an entire PLC program
+2. Reinforce Program Instructions
+3. Reinforce Program Flow
+4. Reinforce HMI/PLC Interaction
+5. Reinforce Process Logic
+6. Reinforce Alarm Functionality
+## Main
+
+- The `S:1/15` labeled as "First Pass"
+	- ![[Pasted image 20240926161424.png]]
+	- This bit energized only during the first scan when the PLC is turned on and then turned FALSE afterwards
+	- Typically used as an init bit to make sure that when the PLC is turned on to make sure that certain actions happen
+	- In this example, we are moving a 0 int to the blower mode so that when the PLC first turns on, the blower turns off
+
+- Project Structure
+	- This project is structured as:
+		- DIGITAL INPUTS
+		- DIGITAL OUTPUTS
+		- ANALOG INPUTS
+		- ANALOG OUTPUTS
+		- CONTROLS
+		- ALARMS
+		- DISPLAY
+
+- Unlatch of the `S:5/0` bit "Overflow Trap"
+	- ![[Pasted image 20240926162004.png]]
+	- Prevents math errors from killing the program during execution (e.g. diving by 0)
+	- This is a MATH Error bit
+	- **This needs to appear on the last rung on Ladder #2 MAIN to prevent the PLC from faulting (and stopping) out completely**
+## Digital Input
+- Symbols
+	- These allow us to find these easily when we use an OPC server to visualize this
+## Digital Output
+- We want to make sure that we are energizing outputs in one spot and one spot only
+## Analog Input
+- Three Branches for Analog Input Possibilities
+	- LIM Branch
+		- The Limit Block tests that the Input falls between 0-16383 (Scaled for PID), if True, then scale it to 0-100 and store as a float (F8:0)
+	- LES Branch
+		- Check the value and see if it is less than 0
+		- That means that it is out of range and will force in a 0% to prevent bad math to the output (F8:0)
+	- GRT
+		- Checks the value to see if it is greater than 16383
+		- That means that it is out of bounds in the high end and uses the MOV command to move 100% as the output (F8:0)
+## Analog Output
+![[Pasted image 20240926165557.png]]
+## Controls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Alarms
+## Display
+## Reverse Engineering a PLC Program
