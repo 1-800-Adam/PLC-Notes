@@ -691,12 +691,23 @@ Best practice to setup alarms in the PLC. It is not best practice in the long ru
 ![DualBitAlarmsNotifications.pdf](./attachments/DualBitAlarmsNotifications.pdf)
 ### Adding Alarms on the Analog Heater Program
 - ONS makes the remainder of the rung true on a pulse while OSR sets a pulse to a memory location (a bit)that can be used to do other things. They're very similar.
+
 ![Heater_Alarms.pdf](./attachments/Heater_Alarms.pdf)
-`![[./attachments/Heater_Alarms.pdf]]`
 ## Setpoints
 Setpoints are tools used to allow the operator to set limits and parameters for the system to function. 
 
+We previously set a LL limit of 15%. However, there may come a day when we want the operator to set this to 5% instead. In order to do this change, we would need to revisit site and modify the program. However, we can also use SetPoints to allow for this.
 
+This is as simple as adding an integer for our LL level setpoint that we assume can be set from the HMI:
 
-
-## Alarms and Digital Control Logic
+Keep in mind that this mainly depends on the application. There are always instances where you do not want certain setpoints to be set by the operator. You may want certain setpoints to be set from another person with more knowledge (i.e. Maintenance vs the operator). 
+![[Pasted image 20240926104820.png]]
+# HMI (Human Machine Interface)
+## Objectives
+## HMI Overview
+## HMI Alternatives
+## Basic Flow of an HMI Program
+## Setting up a Screen
+## Alarms/Events/Notifications
+## Permissions
+## Designing around UX
