@@ -704,10 +704,84 @@ Keep in mind that this mainly depends on the application. There are always insta
 ![[Pasted image 20240926104820.png]]
 # HMI (Human Machine Interface)
 ## Objectives
+1. Concept and Importance of HMI
+2. Exposure to a variety of HMI methods
+3. Exposure to how an HMI program works
+4. Understanding tags and addresses
+5. basic process of creating a screen with controls
+6. learn how HMI manages alarms and notification events
+7. Get an overview of permission management on an HMI
 ## HMI Overview
+HMI stands for Human Machine Interface to allow for the visualization and control of a Machine / Process / System.
+
+The HMI allows us to read and write to the PLC. The PLC Programmer needs to be careful to display the right information and appropriate level of control on the HMI for the operator based on considerations such as safety and security. 
+![[CHA-102WR_1__54360.jpg]]
 ## HMI Alternatives
+The front panel of the PLC display can be programmed as an HMI
+![[Pasted image 20240926111646.png]]
+
+HMI's can be as expensive or cheap as needed.
 ## Basic Flow of an HMI Program
+Typically with Rockwell we would use Factory Talk to build an HMI
+
+One example:
+![[Pasted image 20240926111906.png]]
+- This screen also have an invisible button on the bottom right that is held for 20s to enable a diagnostic and service data mode
+
+![[Pasted image 20240926112003.png]]
+
+![[Pasted image 20240926112134.png]]
+
+![[Pasted image 20240926112155.png]]
+- S box is who is logged in
+
+![[Pasted image 20240926112229.png]]
+
+![[Pasted image 20240926112248.png]]
+
+For this demo, we are using FactoryTalk View Studio. 
+
+In almost all HMI dev environment is the use of tags. This refers to every piece of information being written from or to a PLC. 
+
+For example: 
+![[Pasted image 20240926112537.png]]
+![[Pasted image 20240926112709.png]]
+- Device is reading from an external device
+- Memory is reading from the HMI's computer
+
+Best to think of the HMI as a layer above the PLC that talks with the PLC via tags and tag addresses. Tags are defined to memory locations in the PLC. 
+
+A common component with HMI development is the tag browser 
 ## Setting up a Screen
+Setup an OPC server connection to our emulator "RSLogix Emulate 500". Factory talk cannot talk directly with the emulator driver, therefore we need to use OPCUA (Built into RSLinx).
+
+Project>Add new server>RSLinx OPC Server
+![[Pasted image 20240926115834.png]]
 ## Alarms/Events/Notifications
+Alarms are configured using the alarm configuration window
+![[Pasted image 20240926121556.png]]
+![[Pasted image 20240926121618.png]]
+![[Pasted image 20240926121627.png]]
+![[Pasted image 20240926121651.png]]
+- This is where you would setup the tags assigned to alarm silence and alarm reset
 ## Permissions
+There are times where you want only certain people to be able to make modifications and see certain screens.
+
+This takes place under user management. First create a new user and password and add this user to a user group (show users only).
+
+Next we will click on Runtime security to select the permissions for certain users: 
+![[Pasted image 20240926122140.png]]
+![[Pasted image 20240926122233.png]]
+
+Pages and items can be assigned security codes to determine if they can be accessed by the correct user: 
+![[Pasted image 20240926122750.png]]
 ## Designing around UX
+Some considerations:
+1. The Usability of the HMI for operators
+2. If there is a setup procedure for this machine to be able to have it run at first. Shutdown team.
+3. How intuitive does the HMI need to be? Revolving door of users or an expert with the system?
+4. Security -> what damage can be done and how far can certain user accounts get?
+5. Time for development
+
+Ultimate goal is for someone with no prior experience with this system to be able to look at the HMI to be able to tell how the system works and what to do. 
+# Communications
