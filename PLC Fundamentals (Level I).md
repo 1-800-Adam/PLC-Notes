@@ -798,7 +798,7 @@ In RSLogix, we typically will be using is RSLinx. RSWho will show us the devices
 
 This also gives us the option of taking AB PLC and publishing their tags on DDE and OPC protocols as an interface for other devices to read and write tags to the PLC. 
 
-# Program Walkthrough
+# Program Walkthrough `*skip*`
 ## Objectives
 1. Dissect an entire PLC program
 2. Reinforce Program Instructions
@@ -847,31 +847,186 @@ This also gives us the option of taking AB PLC and publishing their tags on DDE 
 ## Analog Output
 ![[Pasted image 20240926165557.png]]
 ## Controls
+![[Pasted image 20240927113801.png]]
 
+Next rung is the logic for turning the system off. Either from the physical push button or HMI:
+![[Pasted image 20240927113902.png]]
 
+Next rung allows the system to transition to a faulted state if the general alarm notification bit is on:
+![[Pasted image 20240927114052.png]]
 
+HOA control for setting blower mode:
+![[Pasted image 20240927114151.png]]
 
+Energizing of the blower based on:
+- System Mode =! 0 (either On or FAULTED, but not OFF) AND Blower Mode must be in AUTO
+- IF system is in HAND (Manual) mode, then blower will run
+![[Pasted image 20240927114526.png]]
 
+This is Filling of a tank:
+```python
+if system_mode =! "OFF":#Either ON or FAULTED
+	if Tank_level < 20: #tank Scaled for PID less than 20
+		if alarm_reset =! True: #if alarm_reset is False
+			Tank_Fill_Start_Delay_Timer
+			...
+#Wondering if there is a way to translate lader logic to python style
+```
+![[Pasted image 20240927114640.png]]
 
+Instead of tank fill logic, this set of ladder logic will drain tank
+![[Pasted image 20240927115451.png]]
 
+These two rungs will handle filling and draining of the tank
+![[Pasted image 20240927115554.png]]
 
+Heater control, when the system mode =! 0, and no high temp alarm, then activate heater. This heater uses two signals, a digital and an analog: On/Off and analog is how much to heat.
+![[Pasted image 20240927121643.png]]
 
+This next rung will send a signal to tell it how much to heat. 
+![[Pasted image 20240927121823.png]]
+This rung takes in an input from the HMI (Set by the operator) and inputs it to the integer: `N7:6`
 
+`PD9:0.SPS`: 
+- PD9 is the PID Data File
+- Stored as Set Point for PID Control Loop
 
+PID:
+- Process Variable (`N7:8`): This is the integer that the PID will look at. This is the Scaled temp coming in from an analog input
+- Control Variable (`N7:9`): We will be controlling this number, which is being written out to an analog heater. 
+- The PID is controlling this Control Variable `N7:9` (Analog output to the heater) to make the Process Variable `N7:8` (The Analog Input from the temperature sensor) attain and maintain our setpoint from `N7:6` which is currently set to 90
+![[Pasted image 20240927124011.png]]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Any time our system is ON or FAULTED and the General Alarm Bit is energized (silences or Clears Notifications)
+![[Pasted image 20240927124027.png]]
 ## Alarms
+Compare tank level with tank set point LL, if below the LL setpoint and the alarm reset button has not been pushed, timer for 5 seconds and then ONS the alarm trigger bit.
+![[Pasted image 20240927124148.png]]
+
+![[Pasted image 20240927124446.png]]
+Hold in circuit from previous ONS that will hold in this alarm until it is either reset of no longer active
+
+*May need confirmation below:*
+As a reminder, a one shot is used to trigger an instruction Once per scan instead of many times. For example, A PLC may have a scan time of 8ms. If you try to be as quick as possible with pressing a push button, this would register 4486 counts.  For notifications, this is important to prevent the user from registering 4000 alarms all at once instead of refreshing as long as the instance is true. 
+![[Pasted image 20240927125957.png]]
+ 
+![[Pasted image 20240927130419.png]]
+![[Pasted image 20240927130530.png]]
+![[Pasted image 20240927130706.png]]
+![[Pasted image 20240927131249.png]]
+
+Temperature Alarms
+![[Pasted image 20240927131302.png]]
+![[Pasted image 20240927131416.png]]
+![[Pasted image 20240927131431.png]]
+![[Pasted image 20240927131511.png]]
+
+Categorical Alarms:
+- These are alarms that can be read on another system, does not say what the issue is, just that there is something wrong with the tank or temp or blower etc...
+![[Pasted image 20240927131538.png]]
+![[Pasted image 20240927131658.png]]
+
+This is a General Alarm Notification Bit, something is wrong with the system
+![[Pasted image 20240927131723.png]]
 ## Display
-## Reverse Engineering a PLC Program
+Ladder 9 Display
+- Heater CV, this is the output of the PID sent to the heater to determine how much to heat up, but we want to show the operator what % of the heat the heater is generating. Is the Heater at 50% of its output or 100% of its output?
+![[Pasted image 20240927131921.png]]
+## DemoTest File
+![[DEMOTEST-200809-142534.pdf]]
+# Shakedown and Debug
+## Objectives
+1. How to prepare a program for use
+2. concept of emulation
+3. how to conduct a dry run
+4. how to force IO
+5. potential consequences of mistakes
+## Emulation
+![[Pasted image 20240927140643.png]]
+RSLogix Emulate 500 is a program that allows us to interact with a PLC program while it is running and to assist with the debug of that program
+### Step 1: 
+- File>Open>DemoTest Program in RSLogix Emulate 500
+- Set the station # to 1
+- Now PLC program is loaded
+- When you open the same program and same version in RSLogix 500, you can connect
+### Step 2: 
+- Open the same program in RSLogix 500
+- Click Comms>Who Active Go Online
+- ![[Pasted image 20240927140855.png]]
+- ![[Pasted image 20240927141003.png]]
+- Open the EMU500, this is the program running 
+- Click OK
+### Step 3:
+- You will notice that now the REMOTE PROGRESS Status have changed and the ladder is spinning
+- Click Run:
+- ![[Pasted image 20240927141210.png]]
+### Step 4: 
+- Program is now live and running in the emulator and we are connected to it via RSLogix 500 so we can see what it happening in the PLC program while it is running 
+
+> [!Info] PLC Modes
+> There are Three Modes a PLC typically will have:
+> 1. `RUN`: Program is running
+> 2. `PROGRAM`: Program is not running and allows us to transfer between us and the PLC. PLC is idle
+> 3. `REMOTE`: Allows a computer to change the mode between Run and Program. Instead of us physically changing the mode from the PLC or touch screen, we can do if from here
+>
+> PLC Emulator will not be able to execute a PID Control Loop, this needs to be tested on an actual PLC
+
+## Dry Run
+If a bit is energized, it is highlighted green
+
+We need to test every single input, output, element, function on the HMI and PLC to make sure that it is good to go. 
+## Forcing IO
+Suppose we wanted to force certain inputs and output bits to energize to simulate and IO firing in real life. This is achieved using the forces:
+![[Pasted image 20240927144114.png]]
+
+This is done by right clicking a bit and selecting Force On or Force Off. If something is being forced on or off, we can also remove the force as well. 
+![[Pasted image 20240927144214.png]]
+
+Looks like sometimes you may need to force something online and then click the "toggle bit" option to make sure that it sticks
+
+There is no way to simulate a PID using an emulator, must be controlled using a live system
+
+Remember to remove forces after you have completed your testing
+## Electromechanical Checks
+This is testing of the program on a live system. We need to make sure that the machine is wired correctly and that all components in the PLC panel work. This is also know as IO Checks.
+
+This involves testing the electrical connection between the PLC modules and devices. 
+
+We need to check:
+- No cable cross talk from high voltages causing bad readings
+- All valves can fire
+- Motors are running in the correct direction
+- Nothing is stuck
+- Everything is wired correctly
+## Full Function Test
+This is when all utilities and hardware is installed, this is a final test. At this point, we should have full confidence there will be no surprises once we power the system on and run a test. There should be no major changes at this point.
+
+You never want a major bug to show up at this stage. Be thorough and don't let people rush this process.
+## Troubleshooting Methodology
+This is when something goes wrong and you need to find out what the problem is and how to fix it. 
+
+The Acronym "RV AIR" Will help with this process:
+- `R` - Recognize
+	- Recognize that there is a problem
+	- This is a report or suspicion that there is a problem
+- `V` - Verify
+	- Verify that the problem is actually a problem
+	- This could be user error
+	- Ask them to pull out their phone and take a picture of the problem
+- `A` - Analyze
+	- Now we take a look at the problem and check to see where things are wrong
+- `I` - Isolate
+	- Isolate the problem to determine where the root cause is.
+	- Get the problem down to a single thing that can be fixed
+- `R` - Repair (and **Test**)
+	- Fix the problem and Test that this fix is valid
+## Consequences
+Most machines have a way of killing people one way or another if they are not handled correctly. 
+## Proper Programming makes Debugging and Troubleshooting Easy
+Writing good logic and diligent notes is the key to making debug easier and quicker. Consistent code will make it easier to find when things go wrong. 
+# Getting the Job Done Fast!
+## Overview
+## Creating your Architecture
+## Approaching the logic
+## Start from a Template
+## Primer for Level 2
