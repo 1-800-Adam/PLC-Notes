@@ -1,0 +1,50 @@
+[SLC 500 Instruction Set](https://literature.rockwellautomation.com/idc/groups/literature/documents/rm/1747-rm001_-en-p.pdf)
+- **User**
+	- New Rung
+	- Rung Branch
+	- `XIC`-Examine if Closed
+	- `XIO`-Examine if Open
+	- `OTE`-Output Energize
+	- `OTL`-Output Latch
+	- `OTU`-Output UnLatch
+	- `ABS`-Absolute Value
+- **Bit**
+	- `XIC`-Examine if Closed
+	- `XIO`-Examine if Open
+	- `OTE`-Output Energize
+	- `OTL`-Output Latch
+	- `OTU`-Output UnLatch
+	- `ONS`-One Shot 
+	- `OSR`-One Shot Rising
+	- `OSF`-One Shot Falling
+- **Timer/Counter**
+	- `TON`-Timer On Delay
+- **Input/Output**
+- **Compare**
+	- `EQU`-Equal
+	- `NEQ`-Not Equal
+	- `LES`-Less Than
+	- `GRT`-Greater Than
+	- `LEQ`-Less Than or Equal
+	- `GEQ`-Greater Than or Equal
+- **Compute/Math**
+	- `ADD`-Add
+	- `SUB`-Subtract
+	- `MUL`-Multiply
+	- `DIV`-Divide
+	- `SQR`-Square Root
+	- `NEG`-Negate
+- **Move/Logical**
+	- `MOV`-Move
+- **Files/Misc**
+- **File Shift/Sequencer**
+- **Program Control**
+	- `JMP`-Jump
+	- `LBL`-Label
+	- `JSR`-Jump To Subroutine
+- **ASCII Control**
+- **ASCII String**
+- **Micro High Speed Control** 
+- **Trig Functions**
+- **Advanced Math**
+	- `SCP`-Scale with Parameters

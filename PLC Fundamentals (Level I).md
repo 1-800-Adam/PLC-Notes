@@ -1120,7 +1120,7 @@ Hour Meter:
 Refresher on Digital Control Logic:
 ![[Pasted image 20240930130744.png]]
 
-
+![[DEMOTEST-200809-142534 1.pdf]]
 
 
 
