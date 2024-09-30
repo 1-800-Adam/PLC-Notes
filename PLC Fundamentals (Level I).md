@@ -1026,7 +1026,108 @@ Most machines have a way of killing people one way or another if they are not ha
 Writing good logic and diligent notes is the key to making debug easier and quicker. Consistent code will make it easier to find when things go wrong. 
 # Getting the Job Done Fast!
 ## Overview
+This section overviews how to best scope out a project from scratch and getting started with how to plan and set things up
 ## Creating your Architecture
+Step one when starting a project is creating the program's architecture.
+
+You want to break things down based on the size of the project you are creating. For example, if you have 1000 I/O's, then it might make sense to divide based on the type of device for each file. Otherwise, smaller PLC projects might only have one file with all of the IO.
+
+For example, in a medium sized project, you may want program files such as:
+- `MAIN`
+	- This is where the JSR's live that jump to all of the other rungs
+- `Digital Inputs`
+- `Digital Outputs`
+- `Analog Inputs`
+- `Analog Outputs`
+- `HOA`
+	- Hand, Off, Auto Logic
+- `Control Logic`
+- `Alarms`
+- `System Modes`
+- `Process Logic`
+Don't forget to add `JSR`(Jump to Solutions) on the Main file to jump to these rungs for every scan. 
+
+Remember that the logic used on a PLC is circular, there is no start or end point for your program. Meaning that it does not usually matter the order that items get called before others (Typically the Order of Operations does not matter). 
+
+We also need to keep in mind that PLC logic is always in development, make sure to plan for when we need to make a change. 
 ## Approaching the logic
+After setting up the architecture, next logical step is to work on setting up the IO.
+
+You will need to create or ask for an IO list. This is a list of all of the devices coming into the system and everything that the system needs to output to. What devices do we need input from and what do we need to be controlling.
+
+### Digital Inputs 
+![[Pasted image 20240930122933.png]]
+Usually: XIC -> OTE. This allows us to call a bit to find the status of an input instead of calling the actual input device. 
+
+### Analog Inputs
+![[Pasted image 20240930123003.png]]
+Usually: Scaled with Parameters with logic to check if the input is between 0 and 16,383. 
+
+### Digital Output
+![[Pasted image 20240930123420.png]]
+
+### Analog Output
+
+### HOA
+![[Pasted image 20240930123611.png]]
+
+### Alarms (Logic for 1 alarm)
+![[Pasted image 20240930123909.png]]
+
+A lot of work can be done before we even know what the machine control logic is. This is mainly IO setups, Alarms, Modes...
 ## Start from a Template
+A lot of work can be done by taking logic from a PLC template and adapting it to your particular situation. 
+
+Example Template:
+![[Pasted image 20240930125524.png]]
+
+Digital Inputs:
+![[Pasted image 20240930124645.png]]
+
+Digital Outputs:
+![[Pasted image 20240930124705.png]]
+
+Analog Inputs:
+![[Pasted image 20240930124728.png]]
+
+Analog Outputs:
+![[Pasted image 20240930124746.png]]
+
+Analog Alarms:
+HH, LL
+![[Pasted image 20240930124828.png]]
+Logic for if there are any alarms or status of alarm groups:
+![[Pasted image 20240930125018.png]]
+
+Digital Alarms:
+![[Pasted image 20240930125103.png]]
+
+HOA Mode:
+![[Pasted image 20240930125137.png]]
+
+Controls:
+![[Pasted image 20240930125202.png]]
+
+System Modes:
+![[Pasted image 20240930125237.png]]
+
+Hour Meter:
+![[Pasted image 20240930125309.png]]
+![[Pasted image 20240930125330.png]]
+![[Pasted image 20240930125348.png]]
+![[Pasted image 20240930125401.png]]
 ## Primer for Level 2
+Refresher on Digital Control Logic:
+![[Pasted image 20240930130744.png]]
+
+
+
+
+
+
+
+
+
+
+
+
