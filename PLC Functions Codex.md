@@ -19,6 +19,10 @@
 	- `OSF`-One Shot Falling
 - **Timer/Counter**
 	- `TON`-Timer On Delay
+	- `RTO`-Retentive Timer On
+		- Timer that, unlike a normal timer, does not loose its accumulated value. It will hold onto its timer value indefinitely. Timer will pickup where it left off. A normal `TON` timer will reset when the condition is false.
+	- `RES`-Reset
+		- Resets a timer (useful for the `RTO`)
 - **Input/Output**
 - **Compare**
 	- `EQU`-Equal
@@ -34,17 +38,44 @@
 	- `DIV`-Divide
 	- `SQR`-Square Root
 	- `NEG`-Negate
+		- Will make the input value a negative (+25->-25 and -25->+25)
 - **Move/Logical**
 	- `MOV`-Move
+	- `AND`-
+	- `OR`-
+	- `XOR`-Exclusive OR
+	- `NOT`-
+	- `CLR`-Clear will return a word (B3:2) and wipes data to 0 or default value
 - **Files/Misc**
+	- `COP`-Copy
+		- You can use a `#` sign to copy a whole word from source to destination
 - **File Shift/Sequencer**
 - **Program Control**
 	- `JMP`-Jump
 	- `LBL`-Label
 	- `JSR`-Jump To Subroutine
+	- `RET`-Return
+		- Return to the subroutine that called this current one. This is usually a return back to the main.
+	- `TND`-Temporary End
+		- Completely terminates the current scan of the program. Program will go back to the beginning ladder 2 rung 0
 - **ASCII Control**
 - **ASCII String**
+	- `ACN`-ASCII String Concatenate
+		- Combines two strings "Toggle" & "Bit" -> "ToggleBit"
+	- `ACI`-ASCII String to Integer 
+	- `AIC`-Integer to ASCII String
+	- `ASC`-ASCII String Search
+		- `Source`=What to search for
+		- `Index`=Starting at
+		- `String` Search=String to be searched
+	- `AEX`-ASCII String Extract
+		- `Source`=What to be extracted
+		- `Index`=Where to start
+		- `Number`=Number of chars to extract
+	- `ASR`-ASCII String Compare
 - **Micro High Speed Control** 
 - **Trig Functions**
 - **Advanced Math**
 	- `SCP`-Scale with Parameters
+	- `ABS`-Absolute Value
+		- Will produce an absolute value of the input 
