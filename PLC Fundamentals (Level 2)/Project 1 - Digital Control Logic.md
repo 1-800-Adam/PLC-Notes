@@ -45,4 +45,15 @@ Output Slot 0
 ![[Project 1-Digital Control Logic DATA FILES PLANNING.pdf]]
 ## Project Final Report:
 ![[Project 1-Digital Control Logic.pdf]]
- 
+
+## Lessons Learned:
+- IO Runs first
+- Instructor starts on the controls file by adding two OTE's for the two digital outputs
+- Instructor implements a timer for fluids such that if the switch is left open for >5s, then activate the pump
+	- We want the pump to turn on when P<90PSI and after 5s.
+- Pump start trigger is placed on a separate line such that when timer completes, then activates a ONS to the trigger
+- Timer for 110 PSI switch closed for 5s to activate a one shot to the Digital Control Logic Hold In to provide the Interrupt 
+- Instructor includes same logic for the light bulb based on timers to prevent light bulb from turning on and off rapidly
+- Might be good to start with all digital outputs using digital control logic 
+## Instructor PLC Code:
+![[InstructorCode.pdf]]
