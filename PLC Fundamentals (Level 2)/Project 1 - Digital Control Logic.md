@@ -1,8 +1,9 @@
-# Project 1: Digital Control Logic
+# Project 1 - Digital Control Logic
 ## Misc. Notes:
 - Digital Control Logic needs a bit for the trigger, bit for the interrupt and those two to control the hold in, cannot perform using the output bit:
 - Step 1 is to try to develop a process diagram for this system using the inputs and outputs that passes the test cases on paper
 - Order of Instructions matters when using One-shot
+- **I may need to check original template to see if I had a JSR to the main causing the program to not progress and act wonky**
 ## Specifications
 ![[Project1-200808-214416.pdf]]
 ## Inputs:
@@ -37,3 +38,11 @@ Output Slot 0
 ![[Project1Process.png]]
 ## Program First Pass
 ![[Pasted image 20241002172052.png]]
+
+## Ladder Logic:
+![[Project 1-Digital Control Logic PROGRAM FILES.pdf]]
+## Data File Planning:
+![[Project 1-Digital Control Logic DATA FILES PLANNING.pdf]]
+## Project Final Report:
+![[Project 1-Digital Control Logic.pdf]]
+ 
