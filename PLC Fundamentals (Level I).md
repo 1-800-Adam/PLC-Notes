@@ -807,8 +807,7 @@ This also gives us the option of taking AB PLC and publishing their tags on DDE 
 5. Reinforce Process Logic
 6. Reinforce Alarm Functionality
 ## Main
-
-- The `S:1/15` labeled as "First Pass"
+- The `S:1/15` labeled as "First Pass" #initialrun #firstpass
 	- ![[Pasted image 20240926161424.png]]
 	- This bit energized only during the first scan when the PLC is turned on and then turned FALSE afterwards
 	- Typically used as an init bit to make sure that when the PLC is turned on to make sure that certain actions happen
