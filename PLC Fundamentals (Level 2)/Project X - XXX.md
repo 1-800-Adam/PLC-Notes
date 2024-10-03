@@ -1,4 +1,4 @@
-# Project #:XXX
+# Project X - XXX
 ## Checklist:
 - Setup File Folder using Template
 - Setup Data Type Planning File
