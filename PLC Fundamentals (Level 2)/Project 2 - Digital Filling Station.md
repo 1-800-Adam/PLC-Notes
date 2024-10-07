@@ -77,9 +77,24 @@ Third Pass:
 	- Don't forget to include a Reset Input (Return Machine to INIT State) and and E-Stop state
 - Progress:
 	- Completed up to DCL for motor, will need to add in DCL for the hoppers based on system mode
-## Project Development Notes
 ## Project Final Delivery
-### Ladder Logic
-### Data File Planning
-### Final Report
+### Report
+![[Project 2 - Digital Filling Station.pdf]]
+### Test Criteria Check
+https://vimeo.com/1017199345
+### Data File Tracking
+![[Project 2 - Digital Filling Station - Data Files.pdf]]
 ## Lessons Learned
+- Would like to investigate more if Digital Control Logic is needed for when you have a Finite State Machine
+- With Digital Control Logic, Should the trigger only happen instantly based on conditions or can conditions continuously be true as long as there is a one-shot 
+- I will need to make a couple edits to the Data File Tracker
+	- Does not seem like all fields are dynamic and don't all use `/`
+	- Would like to organize sections to have a title (binary for Raw/bit)
+- I would like to update the template file so that it has notation based on Raw/indicator bits based on progress from this project
+## Instructor Solution:
+### Notes:
+- 
+
+
+### Instructor PDF:
+![[InstructorSolution.pdf]]
