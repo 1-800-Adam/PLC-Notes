@@ -54,6 +54,7 @@ Second Pass:
 ![[Pasted image 20241004133604.png]]
 Third Pass:
 ![[Pasted image 20241004134237.png]]
+https://excalidraw.com/#json=PHVUESE20h_veZIKX8fsc,rTGGiOcqepMLgGfWtnR5Wg
 ### Notes:
 - This is a machine that will fill boxes with Nuts. The type of nut is determined by the color read using a photo eye and a level switch to determine when the box is full and ready to send down the line
 - Process:
