@@ -41,7 +41,8 @@
 ### Notes
 - Project Summary
 - ![[Pasted image 20241008173809.png]]
-- 
+- https://literature.rockwellautomation.com/idc/groups/literature/documents/rm/1747-rm001_-en-p.pdf
+- ![[Process.png]]
 ---
 # Project Brief: Project Name
 **Project Name:** PLC Inventory Management
@@ -77,8 +78,6 @@
 ## Project Development Notes
 ## Project Final Delivery
 ### Ladder Logic
+![[Project 3 - Inventory Management.pdf]]
 ### Data File Planning
 ### Final Report
-## Lessons Learned
-
-WIDTHDRAW 
